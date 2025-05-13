@@ -15,7 +15,7 @@ const searchWeb = async (query) => {
     );
     return response.data.items || [];
   } catch (error) {
-    console.error("Google Search Error:", error.message);
+    //console.error("Google Search Error:", error.message);
     throw error;
   }
 };

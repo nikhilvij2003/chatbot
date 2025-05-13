@@ -1,6 +1,6 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy; 
-console.log("Google Strategy initialized-------------passport.js file"); 
+//console.log("Google Strategy initialized-------------passport.js file"); 
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const { LEGAL_TCP_SOCKET_OPTIONS } = require("mongodb");
@@ -21,7 +21,7 @@ passport.use(
 
 
         if (!user) { 
-          console.log("Creating new user with Google ID:", profile.id); 
+          //console.log("Creating new user with Google ID:", profile.id); 
 
           const hashedPassword = await bcrypt.hash(profile.emails[0].value, 12);
           user = new User({
@@ -40,10 +40,10 @@ passport.use(
         else {
 
         user.accessToken = accessToken; 
-        console.log("Access token updated for user:", user.email, user.accessToken); // Log access token update
+        //console.log("Access token updated for user:", user.email, user.accessToken); // Log access token update
 
         user.refreshToken =  refreshToken; 
-        console.log("Refresh token updated for user:", user.email, user.refreshToken); // Log refresh token update
+        //console.log("Refresh token updated for user:", user.email, user.refreshToken); // Log refresh token update
 
           try {
             await user.save();

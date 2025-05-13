@@ -6,7 +6,7 @@ const router = express.Router();
 
 // Save project route
 router.post('/save', auth, async (req, res) => {
-    console.log('Saving project:', req.body);
+    //console.log('Saving project:', req.body);
   try {
     const project = new Project({
       ...req.body,

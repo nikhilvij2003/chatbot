@@ -3,7 +3,7 @@ const Chat = require("../models/Chat");
 
 require('dotenv').config();
 console.log("in asssistant dfile")
-console.log(process.env.OPENAI_API_KEY)
+//console.log(process.env.OPENAI_API_KEY)
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
   defaultHeaders: { 
@@ -15,7 +15,7 @@ const openai = new OpenAI({
 const createThread = async (userId) => {
   try {
     const existingThreads = await Chat.find({ userId });
-    console.log("Existing threads for userId:", userId, existingThreads);
+    //console.log("Existing threads for userId:", userId, existingThreads);
     
     const thread = await openai.beta.threads.create();
     await Chat.create({

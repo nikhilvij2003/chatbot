@@ -1,5 +1,5 @@
 const axios = require('axios');
-console.log("In unsplash.js file")
+//console.log("In unsplash.js file")
 class UnsplashAPI {
   static async getPhoto(keyword) {
     try {

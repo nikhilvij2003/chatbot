@@ -38,7 +38,7 @@ const getMessage = async (threadId, userMessage, userToken) => {
     // Detect Calendar Commands
     if (userMessage.toLowerCase().includes("show my events")) {
       console.log("in show events code -----------------assistant.js")
-      const response = await axios.get("http://localhost:5000/api/auth/calendar/events", {
+      const response = await axios.get("https://chatbot-5hyt.onrender.com/api/auth/calendar/events", {
         headers: { Authorization: `Bearer ${userToken}` }
       });
 
@@ -48,7 +48,7 @@ const getMessage = async (threadId, userMessage, userToken) => {
 
     } else if (userMessage.toLowerCase().includes("add event")) {
 
-      const response = await axios.post("http://localhost:5000/api/auth/calendar/event", eventDetails, {
+      const response = await axios.post("https://chatbot-5hyt.onrender.com/api/auth/calendar/event", eventDetails, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
 
@@ -56,7 +56,7 @@ const getMessage = async (threadId, userMessage, userToken) => {
 
     } else if (userMessage.toLowerCase().includes("delete event")) {
       const eventId = userMessage.split(" ").pop();
-      await axios.delete(`http://localhost:5000/api/auth/calendar/event/${eventId}`, {
+      await axios.delete(`https://chatbot-5hyt.onrender.com/api/auth/calendar/event/${eventId}`, {
         headers: { Authorization: `Bearer ${userToken}` }
       });
 

@@ -43,7 +43,7 @@ router.get(
 
       // Redirect to frontend with token and ID
       res.redirect(
-        `http://localhost:3000/chat?token=${token}&id=${req.user._id}`
+        `https://omni-beta-teal.vercel.app/chat?token=${token}&id=${req.user._id}`
       );
     } catch (error) {
       //console.error("Google login error:", error);

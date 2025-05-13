@@ -17,7 +17,7 @@ const server = http.createServer(app); // ✅ attach express app to HTTP server
 const socketIO = require("socket.io");
 const io = socketIO(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "https://omni-beta-teal.vercel.app",
     methods: ["GET", "POST"],
   }
 });

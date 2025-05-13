@@ -28,7 +28,7 @@ initializeSocket(io);
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "http://localhost:3000",
+  origin: "https://omni-beta-teal.vercel.app/",
   credentials: true
 }));
 
@@ -57,7 +57,6 @@ app.get('/api/news', async (req, res) => {
     const response = await axios.get(`https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${process.env.NEWS_API_KEY}`);
     res.json(response.data);
   } catch (error) {
-    console.error('News fetch failed:', error.message);
     res.status(500).json({ error: 'Failed to fetch news' });
   }
 });

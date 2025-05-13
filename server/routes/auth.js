@@ -46,7 +46,7 @@ router.get(
         `http://localhost:3000/chat?token=${token}&id=${req.user._id}`
       );
     } catch (error) {
-      console.error("Google login error:", error);
+      //console.error("Google login error:", error);
       res.status(500).json({ message: "Internal server error", error: error.message || "An unexpected error occurred." });
     }
   }
@@ -185,11 +185,11 @@ router.post("/send-message", authMiddleware, async (req, res) => {
     await newChat.save();
     
 
-    console.log("Incoming message:", message); // Log incoming message
-    console.log("Bot response:", formattedResponse); // Log bot response
+    // console.log("Incoming message:", message); // Log incoming message
+    // console.log("Bot response:", formattedResponse); // Log bot response
     res.status(200).json({ botResponse: formattedResponse, threadId: chat.threadId });
   } catch (error) {
-    console.error("Error processing message:", error);
+    //console.error("Error processing message:", error);
     res.status(500).json({ message: "Failed to process message" });
   }
 });
@@ -211,7 +211,7 @@ router.get("/logout", (req, res) => {
 // Get Chat History
 // ==========================
 router.get("/get-history", authMiddleware, async (req, res) => {
-  console.log("In Get-History route---routes/auth")
+  //console.log("In Get-History route---routes/auth")
   try {
     const chats = await Chat.find({ userId: req.user.id }).sort({
       timestamp: 1,
@@ -219,53 +219,12 @@ router.get("/get-history", authMiddleware, async (req, res) => {
 
     res.status(200).json(chats);
   } catch (error) {
-    console.error("Error fetching chat history:", error);
+    //console.error("Error fetching chat history:", error);
     res.status(500).json({ message: "Failed to fetch chat history" });
   }
 });
 
-// router.get("/get-history", authMiddleware, async (req, res) => {
-//   try {
-//     const { threadId } = req.query;
-//     // 1) find the thread doc
-//     const threadDoc = await Chat.findOne({
-//       userId:   req.user.id,
-//       threadId: threadId
-//     });
 
-//     if (!threadDoc) {
-//       return res.status(404).json({ message: "No chat found" });
-//     }
-
-//     // 2) sort messages by timestamp ascending
-//     const sorted = [...threadDoc.messages].sort(
-//       (a, b) => new Date(a.timestamp) - new Date(b.timestamp)
-//     );
-
-//     // 3) return the array
-//     res.status(200).json(sorted);
-//   } catch (error) {
-//     console.error("Failed to fetch chat history:", error);
-//     res.status(500).json({ message: "Failed to fetch chat history" });
-//   }
-// });
-
-
-// ==========================
-// Get All Threads for User
-// ==========================
-// router.get("/threads", authMiddleware, async (req, res) => {
-//   try {
-//     const threads = await Chat.aggregate([
-//       { $match: { userId: req.user.id } },
-//       { $group: { _id: "$threadId", lastMessage: { $last: "$createdAt" } } },
-//       { $sort: { lastMessage: -1 } }
-//     ]);
-//     res.json(threads);
-//   } catch (error) {
-//     res.status(500).json({ message: "Failed to fetch threads" });
-//   }
-// });
 router.get("/threads", authMiddleware, async (req, res) => {
   try {
     const threads = await Chat.aggregate([
@@ -321,7 +280,7 @@ router.get("/thread/:threadId", authMiddleware, async (req, res) => {
 router.get("/calendar/events", authMiddleware, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    console.log("user id is:", user);
+    //console.log("user id is:", user);
     const events = await listEvents(user.accessToken, user.refreshToken, user._id);
     res.json(events);
   } catch (error) {
@@ -378,7 +337,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
   try {
     const { message, threadId } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
-    console.log("🛡 Token:", req.headers.authorization);
+    //console.log("🛡 Token:", req.headers.authorization);
 
     if (!message || !threadId) {
       return res.status(400).json({ message: "Message and threadId are required" });
@@ -411,7 +370,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
       } catch (fetchError) {
         retries--;
         if (retries === 0) {
-        console.error("Fetch call failed:", fetchError.stack || fetchError.message || fetchError);
+        //console.error("Fetch call failed:", fetchError.stack || fetchError.message || fetchError);
         return res.status(500).json({ message: "Fetch call to OpenAI failed", error: fetchError.message || fetchError });
         }
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -420,7 +379,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
 
     if (!streamResponse.ok) {
       const errorText = await streamResponse.text();
-      console.error("Streaming API Error:", errorText);
+      //console.error("Streaming API Error:", errorText);
       return res.status(500).json({ message: "OpenAI streaming failed", error: errorText });
     }
 
@@ -470,7 +429,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
             });
           }
         } catch (err) {
-          console.error("JSON parse error:", err.message);
+          //console.error("JSON parse error:", err.message);
         }
       }
     }
@@ -492,7 +451,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
     return res.status(200).json({ message: "Streaming complete" });
 
   } catch (error) {
-    console.error("Streaming error:", error.stack || error.message || error);
+    //console.error("Streaming error:", error.stack || error.message || error);
     res.status(500).json({ message: "Streaming failed", error: error.message || error });
   }
 });

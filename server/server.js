@@ -28,7 +28,7 @@ initializeSocket(io);
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "https://omni-beta-teal.vercel.app/",
+  origin: "https://omni-beta-teal.vercel.app",
   credentials: true
 }));
 

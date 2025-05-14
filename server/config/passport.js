@@ -10,7 +10,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "https://chatbot-5hyt.onrender.com/api/auth/google/callback",
+      callbackURL: `https://chatbot-5hyt.onrender.com/api/auth/google/callback`,
       scope: ["profile", "email", "https://www.googleapis.com/auth/calendar","https://www.googleapis.com/auth/calendar.readonly"],
       prompt: "consent", 
       accessType: "offline", 

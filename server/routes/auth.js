@@ -41,9 +41,14 @@ router.get(
         { expiresIn: "1h" }
       );
 
+      // Get client URL based on environment
+      const CLIENT_URL = process.env.IS_PROD === 'true' 
+        ? "https://omni-beta-teal.vercel.app" 
+        : "http://localhost:3000";
+
       // Redirect to frontend with token and ID
       res.redirect(
-        `https://omni-beta-teal.vercel.app/chat?token=${token}&id=${req.user._id}`
+        `${CLIENT_URL}/chat?token=${token}&id=${req.user._id}`
       );
     } catch (error) {
       //console.error("Google login error:", error);

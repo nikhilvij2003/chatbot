@@ -11,13 +11,17 @@ const pptRoutes = require("./routes/ppt");
 const projectRoutes = require("./routes/project");  // Added import for project routes
 const { initializeSocket } = require("./config/Socket"); // ⬅️ your socket handler
 
+const CLIENT_URL = process.env.IS_PROD === 'true' 
+  ? "https://omni-beta-teal.vercel.app" 
+  : "http://localhost:3000";
+
 const app = express();
 const http = require("http");
 const server = http.createServer(app); // ✅ attach express app to HTTP server
 const socketIO = require("socket.io");
 const io = socketIO(server, {
   cors: {
-    origin: "https://omni-beta-teal.vercel.app",
+    origin: CLIENT_URL,
     methods: ["GET", "POST"],
   }
 });
@@ -28,7 +32,7 @@ initializeSocket(io);
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: "https://omni-beta-teal.vercel.app",
+  origin: CLIENT_URL,
   credentials: true
 }));
 

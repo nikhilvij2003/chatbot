@@ -6,17 +6,39 @@ const router = express.Router();
 
 // Save project route
 router.post('/save', auth, async (req, res) => {
-    //console.log('Saving project:', req.body);
   try {
-    const project = new Project({
-      ...req.body,
-      user: req.user.id
-    });
+    const { html, css, js, name } = req.body;
+    
+    // Validate required fields
+    if (!html && !css && !js) {
+      return res.status(400).send({ error: 'At least one of HTML, CSS, or JS is required' });
+    }
 
+    // Create project data
+    const projectData = {
+      html: html || '',
+      css: css || '',
+      js: js || '',
+      name: name || 'Untitled Project',
+      user: req.user.id,
+      updatedAt: new Date()
+    };
+
+    const project = new Project(projectData);
     await project.save();
-    res.status(201).send(project);
+    
+    res.status(201).json({
+      message: 'Project saved successfully',
+      project: {
+        id: project._id,
+        name: project.name,
+        createdAt: project.createdAt,
+        updatedAt: project.updatedAt
+      }
+    });
   } catch (err) {
-    res.status(400).send({ error: 'Saving failed' });
+    console.error('Project save error:', err);
+    res.status(500).send({ error: 'Failed to save project. Please try again.' });
   }
 });
 

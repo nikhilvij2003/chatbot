@@ -389,7 +389,7 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
     }
 
     const reader = streamResponse.body.getReader();
-    const decoder = new TextDecoder(" utf-8");
+    const decoder = new TextDecoder("utf-8");
     let result = "";
 
     const io = require("../config/Socket").getIO();
@@ -403,7 +403,8 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
       buffer += chunk;
 
       const lines = buffer.split("\n");
-      buffer = "";
+      // Keep the last line in buffer if it's incomplete
+      buffer = lines.pop() || "";
 
       for (let i = 0; i < lines.length; i++) {
         let line = lines[i].trim();
@@ -412,12 +413,6 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
         let json = line.replace(/^data: /, "");
         if (json === "[DONE]") {
           // End of stream
-          break;
-        }
-
-        // If this is the last line and it might be incomplete, buffer it for next read
-        if (i === lines.length - 1 && !json.endsWith("}")) {
-          buffer = line + "\n";
           break;
         }
 
@@ -436,6 +431,27 @@ router.post("/stream-message", authMiddleware, async (req, res) => {
         } catch (err) {
           //console.error("JSON parse error:", err.message);
         }
+      }
+    }
+
+    // Handle any remaining buffer content
+    if (buffer.trim()) {
+      try {
+        const json = buffer.trim().replace(/^data: /, "");
+        if (json && json !== "[DONE]") {
+          const parsed = JSON.parse(json);
+          const textPart = parsed.choices?.[0]?.delta?.content;
+          if (textPart) {
+            result += textPart;
+            // Only emit if we haven't already processed this chunk
+            io.to(threadId).emit("streamChunk", {
+              threadId,
+              partial: textPart,
+            });
+          }
+        }
+      } catch (err) {
+        //console.error("Final buffer parse error:", err.message);
       }
     }
     const formattedResponse = formatBotResponse(result); 
